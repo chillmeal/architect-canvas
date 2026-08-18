@@ -1,0 +1,6 @@
+{
+  "name": "payments-api",
+  "dependencies": {
+    "express": "4.18.0"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "fixture": "ambiguous-architecture",
+  "expectedNodes": [
+    {
+      "stableKey": "fixture/ambiguous-architecture/MICROSERVICE/payment-api",
+      "type": "MICROSERVICE",
+      "name": "payment-api"
+    },
+    {
+      "stableKey": "fixture/ambiguous-architecture/MICROSERVICE/payments-api",
+      "type": "MICROSERVICE",
+      "name": "payments-api"
+    }
+  ],
+  "expectedEdges": [],
+  "expectedIssues": [
+    {
+      "reasonCode": "INSUFFICIENT_SOURCE_SIGNALS",
+      "state": "REVIEW_REQUIRED",
+      "message": "Type-only import mentions payments-api but does not prove a runtime call."
+    },
+    {
+      "reasonCode": "NAMING_SIMILARITY_ONLY",
+      "state": "REVIEW_REQUIRED",
+      "message": "payment-api and payments-api are similar names and must not be merged automatically."
+    }
+  ]
+}

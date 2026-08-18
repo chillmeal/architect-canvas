@@ -1,0 +1,27 @@
+{
+  "fixture": "simple-rest",
+  "expectedNodes": [
+    {
+      "stableKey": "fixture/simple-rest/MICROSERVICE/orders-api",
+      "type": "MICROSERVICE",
+      "name": "orders-api"
+    },
+    {
+      "stableKey": "fixture/simple-rest/MICROSERVICE/billing-api",
+      "type": "MICROSERVICE",
+      "name": "billing-api"
+    }
+  ],
+  "expectedEdges": [
+    {
+      "sourceStableKey": "fixture/simple-rest/MICROSERVICE/orders-api",
+      "targetStableKey": "fixture/simple-rest/MICROSERVICE/billing-api",
+      "type": "SYNC_CALL",
+      "evidencePaths": [
+        "orders-api/src/index.ts",
+        "billing-api/openapi.yaml"
+      ]
+    }
+  ],
+  "expectedIssues": []
+}

@@ -1,0 +1,117 @@
+{
+  "$defs": {
+    "EvidenceSourceType": {
+      "enum": [
+        "SOURCE_CODE",
+        "MANIFEST",
+        "CONFIGURATION",
+        "DEPLOYMENT",
+        "API_CONTRACT",
+        "DOCUMENTATION"
+      ],
+      "title": "EvidenceSourceType",
+      "type": "string"
+    },
+    "EvidenceStrength": {
+      "enum": [
+        "STRONG",
+        "MEDIUM",
+        "WEAK"
+      ],
+      "title": "EvidenceStrength",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "evidenceId": {
+      "minLength": 1,
+      "title": "Evidenceid",
+      "type": "string"
+    },
+    "relativePath": {
+      "minLength": 1,
+      "title": "Relativepath",
+      "type": "string"
+    },
+    "fileHash": {
+      "minLength": 1,
+      "title": "Filehash",
+      "type": "string"
+    },
+    "lineStart": {
+      "minimum": 1,
+      "title": "Linestart",
+      "type": "integer"
+    },
+    "lineEnd": {
+      "minimum": 1,
+      "title": "Lineend",
+      "type": "integer"
+    },
+    "fragmentHash": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Fragmenthash"
+    },
+    "sourceFragmentMarker": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Sourcefragmentmarker"
+    },
+    "sourceType": {
+      "$ref": "#/$defs/EvidenceSourceType"
+    },
+    "strength": {
+      "$ref": "#/$defs/EvidenceStrength"
+    },
+    "analysisUnitId": {
+      "minLength": 1,
+      "title": "Analysisunitid",
+      "type": "string"
+    },
+    "llmInvocationId": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Llminvocationid"
+    }
+  },
+  "required": [
+    "evidenceId",
+    "relativePath",
+    "fileHash",
+    "lineStart",
+    "lineEnd",
+    "sourceType",
+    "strength",
+    "analysisUnitId"
+  ],
+  "title": "Evidence",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://architecture-visualizer.local/contracts/evidence.schema.json"
+}

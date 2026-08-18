@@ -1,0 +1,617 @@
+{
+  "$defs": {
+    "EdgeType": {
+      "enum": [
+        "CONTAINS",
+        "SYNC_CALL",
+        "ASYNC_PUBLISH",
+        "ASYNC_SUBSCRIBE",
+        "DATA_READ",
+        "DATA_WRITE",
+        "ROUTES_TO",
+        "DEPENDS_ON",
+        "IMPLEMENTS",
+        "UNKNOWN"
+      ],
+      "title": "EdgeType",
+      "type": "string"
+    },
+    "EntityOrigin": {
+      "enum": [
+        "INFERRED",
+        "MANUAL"
+      ],
+      "title": "EntityOrigin",
+      "type": "string"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "evidenceId": {
+          "minLength": 1,
+          "title": "Evidenceid",
+          "type": "string"
+        },
+        "relativePath": {
+          "minLength": 1,
+          "title": "Relativepath",
+          "type": "string"
+        },
+        "fileHash": {
+          "minLength": 1,
+          "title": "Filehash",
+          "type": "string"
+        },
+        "lineStart": {
+          "minimum": 1,
+          "title": "Linestart",
+          "type": "integer"
+        },
+        "lineEnd": {
+          "minimum": 1,
+          "title": "Lineend",
+          "type": "integer"
+        },
+        "fragmentHash": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fragmenthash"
+        },
+        "sourceFragmentMarker": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sourcefragmentmarker"
+        },
+        "sourceType": {
+          "$ref": "#/$defs/EvidenceSourceType"
+        },
+        "strength": {
+          "$ref": "#/$defs/EvidenceStrength"
+        },
+        "analysisUnitId": {
+          "minLength": 1,
+          "title": "Analysisunitid",
+          "type": "string"
+        },
+        "llmInvocationId": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Llminvocationid"
+        }
+      },
+      "required": [
+        "evidenceId",
+        "relativePath",
+        "fileHash",
+        "lineStart",
+        "lineEnd",
+        "sourceType",
+        "strength",
+        "analysisUnitId"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "EvidenceSourceType": {
+      "enum": [
+        "SOURCE_CODE",
+        "MANIFEST",
+        "CONFIGURATION",
+        "DEPLOYMENT",
+        "API_CONTRACT",
+        "DOCUMENTATION"
+      ],
+      "title": "EvidenceSourceType",
+      "type": "string"
+    },
+    "EvidenceStrength": {
+      "enum": [
+        "STRONG",
+        "MEDIUM",
+        "WEAK"
+      ],
+      "title": "EvidenceStrength",
+      "type": "string"
+    },
+    "GraphEdge": {
+      "additionalProperties": false,
+      "properties": {
+        "edgeId": {
+          "minLength": 1,
+          "title": "Edgeid",
+          "type": "string"
+        },
+        "sourceNodeId": {
+          "minLength": 1,
+          "title": "Sourcenodeid",
+          "type": "string"
+        },
+        "targetNodeId": {
+          "minLength": 1,
+          "title": "Targetnodeid",
+          "type": "string"
+        },
+        "edgeType": {
+          "$ref": "#/$defs/EdgeType"
+        },
+        "origin": {
+          "$ref": "#/$defs/EntityOrigin"
+        },
+        "validationState": {
+          "$ref": "#/$defs/ValidationState"
+        },
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "contract": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Contract"
+        },
+        "protocol": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Protocol"
+        },
+        "evidence": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "validationRecord": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ValidationRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "title": "Metadata",
+          "type": "object"
+        }
+      },
+      "required": [
+        "edgeId",
+        "sourceNodeId",
+        "targetNodeId",
+        "edgeType",
+        "origin",
+        "validationState",
+        "confidence"
+      ],
+      "title": "GraphEdge",
+      "type": "object"
+    },
+    "GraphNode": {
+      "additionalProperties": false,
+      "properties": {
+        "nodeId": {
+          "minLength": 1,
+          "title": "Nodeid",
+          "type": "string"
+        },
+        "stableKey": {
+          "minLength": 1,
+          "title": "Stablekey",
+          "type": "string"
+        },
+        "nodeType": {
+          "$ref": "#/$defs/NodeType"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "origin": {
+          "$ref": "#/$defs/EntityOrigin"
+        },
+        "validationState": {
+          "$ref": "#/$defs/ValidationState"
+        },
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "evidence": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "validationRecord": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ValidationRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "title": "Metadata",
+          "type": "object"
+        }
+      },
+      "required": [
+        "nodeId",
+        "stableKey",
+        "nodeType",
+        "name",
+        "origin",
+        "validationState",
+        "confidence"
+      ],
+      "title": "GraphNode",
+      "type": "object"
+    },
+    "NodeType": {
+      "enum": [
+        "AUTOMATED_SYSTEM",
+        "FUNCTIONAL_SUBSYSTEM",
+        "MODULE",
+        "SUBMODULE",
+        "MICROSERVICE",
+        "APPLICATION_COMPONENT",
+        "INFRA_COMPONENT",
+        "MESSAGE_BROKER",
+        "TOPIC",
+        "DATABASE",
+        "EXTERNAL_SYSTEM",
+        "API_ENDPOINT",
+        "UNKNOWN"
+      ],
+      "title": "NodeType",
+      "type": "string"
+    },
+    "ReasonCode": {
+      "enum": [
+        "INVALID_AUDIT_STATUS_TRANSITION",
+        "SCHEMA_INVALID",
+        "FAILED_SCHEMA",
+        "EVIDENCE_MISSING",
+        "EVIDENCE_INVALID",
+        "STALE_SOURCE",
+        "REPOSITORY_CHANGED_DURING_AUDIT",
+        "HARD_INVARIANT_VIOLATION",
+        "INVALID_PARENT_TYPE",
+        "INVALID_EDGE_DIRECTION",
+        "CONTAINMENT_CYCLE",
+        "DUPLICATE_NODE",
+        "DUPLICATE_EDGE",
+        "DUPLICATE_CANDIDATE",
+        "SOURCE_TARGET_MISSING",
+        "INSUFFICIENT_SOURCE_SIGNALS",
+        "NAMING_SIMILARITY_ONLY",
+        "LLM_VALIDATOR_CONTRADICTED",
+        "LLM_VALIDATOR_INSUFFICIENT_EVIDENCE",
+        "LLM_VALIDATOR_AMBIGUOUS",
+        "LLM_VALIDATOR_INVALID_SEMANTICS",
+        "REVIEW_REQUIRED"
+      ],
+      "title": "ReasonCode",
+      "type": "string"
+    },
+    "ValidationIssue": {
+      "additionalProperties": false,
+      "properties": {
+        "issueId": {
+          "minLength": 1,
+          "title": "Issueid",
+          "type": "string"
+        },
+        "reasonCode": {
+          "$ref": "#/$defs/ReasonCode"
+        },
+        "state": {
+          "$ref": "#/$defs/ValidationState",
+          "default": "REVIEW_REQUIRED"
+        },
+        "message": {
+          "minLength": 1,
+          "title": "Message",
+          "type": "string"
+        },
+        "relatedFactIds": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Relatedfactids",
+          "type": "array"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "title": "Metadata",
+          "type": "object"
+        }
+      },
+      "required": [
+        "issueId",
+        "reasonCode",
+        "message"
+      ],
+      "title": "ValidationIssue",
+      "type": "object"
+    },
+    "ValidationRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "analyzerInvocationId": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Analyzerinvocationid"
+        },
+        "candidateSchemaVersion": {
+          "minLength": 1,
+          "title": "Candidateschemaversion",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "deterministicResults": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ValidationResult"
+          },
+          "title": "Deterministicresults",
+          "type": "array"
+        },
+        "independentValidatorInvocationId": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Independentvalidatorinvocationid"
+        },
+        "validatorDecision": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Validatordecision"
+        },
+        "policyVersion": {
+          "minLength": 1,
+          "title": "Policyversion",
+          "type": "string"
+        },
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "finalState": {
+          "$ref": "#/$defs/ValidationState"
+        },
+        "reasonCodes": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ReasonCode"
+          },
+          "title": "Reasoncodes",
+          "type": "array"
+        },
+        "validatedAt": {
+          "minLength": 1,
+          "title": "Validatedat",
+          "type": "string"
+        }
+      },
+      "required": [
+        "candidateSchemaVersion",
+        "evidence",
+        "policyVersion",
+        "confidence",
+        "finalState",
+        "validatedAt"
+      ],
+      "title": "ValidationRecord",
+      "type": "object"
+    },
+    "ValidationResult": {
+      "additionalProperties": false,
+      "properties": {
+        "validatorName": {
+          "minLength": 1,
+          "title": "Validatorname",
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/$defs/ValidationState"
+        },
+        "reasonCodes": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ReasonCode"
+          },
+          "title": "Reasoncodes",
+          "type": "array"
+        },
+        "message": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Message"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "title": "Metadata",
+          "type": "object"
+        }
+      },
+      "required": [
+        "validatorName",
+        "state"
+      ],
+      "title": "ValidationResult",
+      "type": "object"
+    },
+    "ValidationState": {
+      "enum": [
+        "CONFIRMED",
+        "CONFIRMED_WITH_WARNINGS",
+        "UNCONFIRMED",
+        "REVIEW_REQUIRED",
+        "REJECTED",
+        "STALE"
+      ],
+      "title": "ValidationState",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "default": "0.1.0",
+      "minLength": 1,
+      "title": "Schemaversion",
+      "type": "string"
+    },
+    "snapshotId": {
+      "minLength": 1,
+      "title": "Snapshotid",
+      "type": "string"
+    },
+    "projectId": {
+      "minLength": 1,
+      "title": "Projectid",
+      "type": "string"
+    },
+    "auditId": {
+      "minLength": 1,
+      "title": "Auditid",
+      "type": "string"
+    },
+    "repositoryStateId": {
+      "minLength": 1,
+      "title": "Repositorystateid",
+      "type": "string"
+    },
+    "nodes": {
+      "items": {
+        "$ref": "#/$defs/GraphNode"
+      },
+      "title": "Nodes",
+      "type": "array"
+    },
+    "edges": {
+      "items": {
+        "$ref": "#/$defs/GraphEdge"
+      },
+      "title": "Edges",
+      "type": "array"
+    },
+    "issues": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ValidationIssue"
+      },
+      "title": "Issues",
+      "type": "array"
+    }
+  },
+  "required": [
+    "snapshotId",
+    "projectId",
+    "auditId",
+    "repositoryStateId",
+    "nodes",
+    "edges"
+  ],
+  "title": "GraphSnapshot",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://architecture-visualizer.local/contracts/graph.schema.json"
+}

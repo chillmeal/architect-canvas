@@ -1,0 +1,40 @@
+{
+  "fixture": "kafka-services",
+  "expectedNodes": [
+    {
+      "stableKey": "fixture/kafka-services/MICROSERVICE/order-service",
+      "type": "MICROSERVICE",
+      "name": "order-service"
+    },
+    {
+      "stableKey": "fixture/kafka-services/MICROSERVICE/inventory-service",
+      "type": "MICROSERVICE",
+      "name": "inventory-service"
+    },
+    {
+      "stableKey": "fixture/kafka-services/TOPIC/orders.created",
+      "type": "TOPIC",
+      "name": "orders.created"
+    }
+  ],
+  "expectedEdges": [
+    {
+      "sourceStableKey": "fixture/kafka-services/MICROSERVICE/order-service",
+      "targetStableKey": "fixture/kafka-services/TOPIC/orders.created",
+      "type": "ASYNC_PUBLISH",
+      "evidencePaths": [
+        "order-service/src/main/java/example/Application.java",
+        "order-service/src/main/resources/application.yml"
+      ]
+    },
+    {
+      "sourceStableKey": "fixture/kafka-services/MICROSERVICE/inventory-service",
+      "targetStableKey": "fixture/kafka-services/TOPIC/orders.created",
+      "type": "ASYNC_SUBSCRIBE",
+      "evidencePaths": [
+        "inventory-service/src/main/java/example/Application.java"
+      ]
+    }
+  ],
+  "expectedIssues": []
+}

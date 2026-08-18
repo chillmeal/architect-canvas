@@ -1,0 +1,1 @@
+"""Fact validation stage boundary."""

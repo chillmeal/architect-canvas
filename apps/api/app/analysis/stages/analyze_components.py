@@ -1,0 +1,1 @@
+"""Component analysis stage boundary."""

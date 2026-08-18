@@ -1,0 +1,1 @@
+"""Repository scan stage boundary."""
